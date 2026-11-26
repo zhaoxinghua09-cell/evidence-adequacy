@@ -1,47 +1,57 @@
 # Cross-tool comparison (results as of 2026-11-27)
 
-All three runs: Windows 11 / Python 3.13.18, same evaluator, same 12-family mutator where the bundle format allows.
+All runs: Windows 11 / Python 3.13.18, one evaluator, adapters in `adapters/`.
+
+Two tables, because corpora must never be mixed:
+
+- **Table A — same mutator.** All three verifiers are hit with the *same* 9–12 constructed families. This is the only apples-to-apples reading.
+- **Table B — tool-native corpus.** UIBC Core's own 21-mutant benchmark (different families, includes multi-phase rollback). Kept for reference only; **not comparable** with A.
+
+## Table A — same mutator, cross-tool
 
 | Verifier | version | eligible mutants | `open` | `pinned` | `head-pinned` | false reject |
 |---|---|---|---|---|---|---|
-| UIBC Core | 0.5.5 | 21 | **90.5%** (19/21) [71.1, 97.4] · B | **95.2%** (20/21) [77.3, 99.2] · A | **100%** (21/21) [84.5, 100] · A | 0/2 |
-| proofbundle | 6.6.1 | 10 | **70.0%** (7/10) [39.7, 89.2] · C | **80.0%** (8/10) [49.0, 94.3] · B | N/A (no checkpoint fixture) | 0/2 |
-| proofline | 0.4.0 | 9 | **77.8%** (7/9) [45.3, 93.7] · C | **88.9%** (8/9) [56.5, 98.0] · B | N/A (no checkpoint/sequence interface) | 0/2 |
+| **UIBC Core** | 0.5.5 | 9 | **66.7%** (6/9) [35.4, 87.9] · C | **77.8%** (7/9) [45.3, 93.7] · C | **88.9%** (8/9) [56.5, 98.0] · B | 0/3 |
+| **proofbundle** | 6.6.1 | 10 | **70.0%** (7/10) [39.7, 89.2] · C | **80.0%** (8/10) [49.0, 94.3] · B | N/A (no checkpoint fixture) | 0/2 |
+| **proofline** | 0.4.0 | 9 | **77.8%** (7/9) [45.3, 93.7] · C | **88.9%** (8/9) [56.5, 98.0] · B | N/A (no sequence interface) | 0/2 |
 
-## Escapes, named
+Escapes per tier:
 
 | Tier | UIBC Core | proofbundle | proofline |
 |---|---|---|---|
-| `open` | `M17 key swap`, `M20 whole-bundle rollback` | `M03 key swap`, `M10 replay`, `M11 base64 alias` | `M03 key swap`, `M10 replay` |
-| `pinned` | `M20 whole-bundle rollback` | `M03 key swap`, `M11 base64 alias` | `M10 replay` |
-| `head-pinned` | none | not measured | not measurable (no interface) |
+| `open` | key_swap, rollback, inject | key_swap, replay, b64 alias | key_swap, replay |
+| `pinned` | rollback, inject | key_swap, b64 alias | replay |
+| `head-pinned` | inject | — | — |
 
-## What each row actually teaches
+## Table B — tool-native corpus (not comparable with A)
 
-**1. `open` always leaks key substitution — that is correct.** With no anchor, a self-signed bundle verifies against its own key. A tool that claims otherwise is lying.
+| Verifier | mutants | open | pinned | head-pinned |
+|---|---|---|---|---|
+| UIBC Core (its own 21-mutant benchmark) | 21 | 90.5% (19/21) · B | 95.2% (20/21) · A | 100% (21/21) · A |
 
-**2. proofbundle: pinning the content root does not pin the signer.** Re-sign the same payload with an attacker key → RFC 6962 leaf unchanged → `--expected-root` still matches → accepted. The verifier exposes no key-pin flag. Lesson: **for evidence, pin the key, not just the root.**
+## What the numbers say
 
-**3. proofline: integrity is tight, freshness is absent.** Output tampering, signature flip, metadata edit, step truncation, digest zeroing and an *empty signature array* are all rejected (`signatures must be a non-empty array when present` — fail-closed, good). But a whole-bundle replay of an older run signed by the same key is accepted **at both tiers**, because nothing binds recency or sequence. Lesson: **integrity ≠ freshness**; a verifier can pass every "was this tampered with?" question and still say yes to "is this the latest run?"
+1. **With one shared mutator, no tool gets an A at `open`.** All three are C-level against constructed forgery, and each leaks its own subset. Any claim of "strong detection" without stating the corpus is unfalsifiable.
+2. **Our own tool is the one whose escape set grows when measured with someone else's mutator.** The 21-mutant benchmark (Table B) hides two families the shared mutator exposes: `inject` and single-run `rollback`. Table B is not wrong — it is narrower. **A tool's own corpus flatters it; that is precisely why a third-party meter is needed.**
+3. **`inject` escapes UIBC Core at all three tiers.** A file dropped into `evidence/` that the index never declared is *tolerated* in the default (lenient) mode; only `--strict` fails it. Practically: an attacker can append material to a sealed package and the default verifier still says PASS. This is a defect-level finding about our own tool, recorded rather than hidden. Recommended fix (needs approval, not yet made): make undeclared-evidence a non-PASS by default.
+4. **`rollback` is caught only at `head-pinned`.** Both proofbundle and proofline accept an older-but-valid bundle at `pinned`; UIBC Core does too. Only the log-head pin (UIBC `--expect-head`, proofbundle `--trusted-checkpoint`) closes it — and only UIBC exposes a working fixture-free path today.
+5. **`proofline` remains the tightest on tamper questions and the weakest on freshness.** `replay` escapes at both tiers it exposes.
+6. **`proofbundle`'s `b64 alias` escape** shows encoding tolerance is a real family; UIBC's shared-mutator run marked alias `N/A` because its S11 strict-serialisation check normalises before comparison.
 
-**4. UIBC Core is the only tool here whose escape set collapses to zero at `head-pinned`.** Its remaining escape at `pinned` is whole-bundle rollback (`M20`), which is exactly what the log-head tier exists for.
+## Methodology notes (why these numbers are honest)
 
-## Operational gotcha found while measuring
-
-`proofline sign` **appends** a signature instead of replacing it. A naive "key-substitution" mutant therefore kept the legitimate signature and passed the key-pinned tier — producing a false accusation. The adapter now clears the signature set first and signs only with the attacker key. **Any cross-implementation test on multi-signature bundles must mutate the whole signature set, not a single entry.** This is recorded rather than silently fixed, because that class of mistake is exactly what makes external measurements untrustworthy.
-
-## Why totals are still not comparable
-
-- UIBC Core: 21 families from its own author's corpus (includes rollback and whole-bundle replay).
-- proofbundle / proofline: only families applicable to a single-step bundle (rollback/reorder structurally `N/A`).
-- Compare **rates within a tier**, never 90.5% vs 70.0% as a ranking. Both scorecards list their `not_applicable` set.
+- **Same families, different bundle shapes**: multi-step vs single-step bundles make `rollback`/`reorder` structurally inapplicable for the latter; every scorecard lists its `not_applicable` set and the denominator is the eligible count.
+- **Small n**: 9–10 mutants give ±20-point intervals. Grades are coarse; the escape *names* are the real output.
+- **`proofline sign` appends signatures**: a naive key-substitution mutant keeps the legitimate signature and falsely passes the pinned tier. The adapter clears the signature set first. Recorded because such mistakes are what make external measurements untrustworthy.
+- **UIBC verdict semantics**: acceptance is taken from the verifier's JSON `result=PASS`, not only the exit code (M12 returns `INCONCLUSIVE` with a non-zero code and is counted as not-accepted).
 
 ## Reproduction
 
 ```bash
-python tools/erm_scorecard.py mutation_benchmark.json out_uibc.json
+python adapters/uibc_adapter.py      --python "$(command -v python)" --out out_uibc.json
 python adapters/proofbundle_adapter.py --exe "$(command -v proofbundle)" --out out_pb.json
-python adapters/proofline_adapter.py  --exe "$(command -v proofline)"  --out out_pl.json
+python adapters/proofline_adapter.py   --exe "$(command -v proofline)"  --out out_pl.json
+python tools/erm_scorecard.py mutation_benchmark.json out_uibc_native.json   # Table B
 ```
 
 ## Conflict disclosure

@@ -20,19 +20,20 @@ For a verifier V and a corpus of known-bad bundles, for each **trust configurati
 
 Output per tier: `killed / n`, **95% Wilson interval**, letter grade (A ≥95%, B 80–95%, C 50–80%, D <50%). Plus `false_reject_on_legit` — a verifier that kills everything is not good, it is useless.
 
-## Results so far (both run on 2026-11-26, Windows 11 / Python 3.13.18)
+## Results so far (one mutator, three tools — 2026-11-27, Windows 11 / Python 3.13.18)
 
 | Verifier | open | pinned | head-pinned | false reject |
 |---|---|---|---|---|
-| **UIBC Core 0.5.5** (21 mutants) | 19/21 = **90.5%** [71.1, 97.4] · B | 20/21 = **95.2%** [77.3, 99.2] · A | 21/21 = **100%** [84.5, 100] · A | 0/2 |
-| **proofbundle 6.6.1** (10 eligible mutants) | 7/10 = **70.0%** [39.7, 89.2] · C | 8/10 = **80.0%** [49.0, 94.3] · B | N/A (no checkpoint) | 0/2 |
-| **proofline 0.4.0** (9 eligible mutants) | 7/9 = **77.8%** [45.3, 93.7] · C | 8/9 = **88.9%** [56.5, 98.0] · B | N/A (no sequence interface) | 0/2 |
+| **UIBC Core 0.5.5** (9 eligible) | 6/9 = **66.7%** · C | 7/9 = **77.8%** · C | 8/9 = **88.9%** · B | 0/3 |
+| **proofbundle 6.6.1** (10 eligible) | 7/10 = **70.0%** · C | 8/10 = **80.0%** · B | N/A (no checkpoint) | 0/2 |
+| **proofline 0.4.0** (9 eligible) | 7/9 = **77.8%** · C | 8/9 = **88.9%** · B | N/A (no sequence interface) | 0/2 |
 
-Read the full comparison and the caveats in [`results/COMPARISON.md`](results/COMPARISON.md). Three findings worth the whole exercise:
+Full intervals, escape names and methodology in [`results/COMPARISON.md`](results/COMPARISON.md). Four findings worth the whole exercise:
 
-1. **All three leak key substitution at `open`.** Expected — with no anchor there is no identity.
-2. **`proofbundle` still leaks it at `pinned`**, because pinning the *content root* does not pin the *signer key*: an attacker re-signs the same payload, the Merkle root is identical, the pin matches. **For evidence, pin the key, not just the root.**
-3. **`proofline` blocks every tamper question and still accepts a replay**: an older run signed by the same key passes at both tiers — integrity without freshness. UIBC Core is the only tool here whose escape set reaches zero once the log head is pinned.
+1. **With one shared mutator nobody is A-grade at `open`.** Each tool leaks a different subset; "strong detection" without a named corpus is unfalsifiable.
+2. **UIBC Core scores better on its own 21-mutant benchmark (90.5/95.2/100) than on this shared mutator (66.7/77.8/88.9).** That gap is the argument for this repo: *a tool's own corpus flatters it*.
+3. **UIBC Core leaks `inject` at all three tiers**: a file dropped into `evidence/` that the index never declared is tolerated in the default (lenient) mode — only `--strict` fails it. Reported against our own tool on purpose; the fix is pending approval.
+4. **Rollback only dies at `head-pinned`**, and only UIBC exposes that tier with a working fixture path; proofbundle needs a checkpoint fixture, proofline has no sequence interface at all.
 
 ## Reproduce
 

@@ -1,0 +1,334 @@
+{
+  "schema": "erm-scorecard/v0.1",
+  "subject": {
+    "tool": "uibc verify (CLI)",
+    "package": "uibc-core",
+    "package_version": "0.5.5"
+  },
+  "corpus": {
+    "source": "ERM 12-family mutator (adapter-generated)",
+    "mutants": 12
+  },
+  "tiers": {
+    "open": {
+      "mutants": 9,
+      "killed": 6,
+      "accepted": 3,
+      "kill_rate": 0.6667,
+      "kill_rate_pct": 66.67,
+      "wilson95": [
+        0.3542,
+        0.8794
+      ],
+      "grade": "C",
+      "escaped": [
+        "M03 key_swap",
+        "M04 rollback",
+        "M06 inject"
+      ]
+    },
+    "pinned": {
+      "mutants": 9,
+      "killed": 7,
+      "accepted": 2,
+      "kill_rate": 0.7778,
+      "kill_rate_pct": 77.78,
+      "wilson95": [
+        0.4526,
+        0.9368
+      ],
+      "grade": "C",
+      "escaped": [
+        "M04 rollback",
+        "M06 inject"
+      ]
+    },
+    "head-pinned": {
+      "mutants": 9,
+      "killed": 8,
+      "accepted": 1,
+      "kill_rate": 0.8889,
+      "kill_rate_pct": 88.89,
+      "wilson95": [
+        0.565,
+        0.9801
+      ],
+      "grade": "B",
+      "escaped": [
+        "M06 inject"
+      ]
+    }
+  },
+  "false_reject_on_legit": {
+    "legit_rc_open": 0,
+    "verdict_open": "PASS",
+    "legit_rc_pinned": 0,
+    "verdict_pinned": "PASS",
+    "legit_rc_head": 0,
+    "verdict_head": "PASS",
+    "false_reject_on_legit": 0
+  },
+  "not_applicable": [
+    {
+      "id": "M07",
+      "family": "reorder",
+      "why": "单事件生命周期，无可重排条目"
+    },
+    {
+      "id": "M10",
+      "family": "replay",
+      "why": "与 M04 回滚同构，已合并计入"
+    },
+    {
+      "id": "M11",
+      "family": "encoding_alias",
+      "why": "S11 严格序列化已覆盖，别名不构成逃逸"
+    }
+  ],
+  "rows": [
+    {
+      "id": "M01",
+      "family": "evidence_tamper",
+      "note": "对已登记证据文件追加字节",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        }
+      }
+    },
+    {
+      "id": "M02",
+      "family": "sig_flip",
+      "note": "seal.json 签名字节翻转",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        }
+      }
+    },
+    {
+      "id": "M03",
+      "family": "key_swap",
+      "note": "另一把钥重新封装的同内容包",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 0,
+          "verdict": "PASS",
+          "accepted": true,
+          "out": "}"
+        },
+        "pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        }
+      }
+    },
+    {
+      "id": "M04",
+      "family": "rollback",
+      "note": "同钥的另一次运行冒充当前",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 0,
+          "verdict": "PASS",
+          "accepted": true,
+          "out": "}"
+        },
+        "pinned": {
+          "rc": 0,
+          "verdict": "PASS",
+          "accepted": true,
+          "out": "}"
+        },
+        "head-pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        }
+      }
+    },
+    {
+      "id": "M05",
+      "family": "truncate",
+      "note": "删除 lifecycle 末尾事件",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        }
+      }
+    },
+    {
+      "id": "M06",
+      "family": "inject",
+      "note": "evidence/ 下新增未声明文件",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 0,
+          "verdict": "PASS",
+          "accepted": true,
+          "out": "}"
+        },
+        "pinned": {
+          "rc": 0,
+          "verdict": "PASS",
+          "accepted": true,
+          "out": "}"
+        },
+        "head-pinned": {
+          "rc": 0,
+          "verdict": "PASS",
+          "accepted": true,
+          "out": "}"
+        }
+      }
+    },
+    {
+      "id": "M08",
+      "family": "metadata_edit",
+      "note": "manifest.agent_id 改为 evil-agent",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        }
+      }
+    },
+    {
+      "id": "M09",
+      "family": "root_swap",
+      "note": "manifest.evidence_root 换全 0",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        }
+      }
+    },
+    {
+      "id": "M12",
+      "family": "proof_missing",
+      "note": "删除 signatures/seal.json",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "verdict": "INCONCLUSIVE",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned": {
+          "rc": 1,
+          "verdict": "INCONCLUSIVE",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned": {
+          "rc": 1,
+          "verdict": "INCONCLUSIVE",
+          "accepted": false,
+          "out": "}"
+        }
+      }
+    }
+  ],
+  "caveats": [
+    "lenient 模式下 evidence/ 未声明文件仅告警；--strict 才判失败（M06 须读 note）",
+    "变异体由评估者构造，不代表完整攻击面",
+    "接受判定取 verify 的 JSON result=PASS；rc 与 result 不一致时按'未被拒绝'记录"
+  ],
+  "overall": {
+    "weakest_tier": "open",
+    "strongest_tier": "head-pinned",
+    "headline": "open 66.67% -> pinned 77.78% -> head-pinned 88.89%"
+  }
+}
