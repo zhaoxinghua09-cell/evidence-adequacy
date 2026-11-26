@@ -1,0 +1,268 @@
+{
+  "schema": "erm-scorecard/v0.1",
+  "subject": {
+    "tool": "proofline verify (CLI)",
+    "package": "proofline",
+    "package_version": "0.4.0"
+  },
+  "corpus": {
+    "source": "ERM 12-family mutator (adapter-generated)",
+    "mutants": 12
+  },
+  "tiers": {
+    "open": {
+      "mutants": 9,
+      "killed": 7,
+      "accepted": 2,
+      "kill_rate": 0.7778,
+      "kill_rate_pct": 77.78,
+      "wilson95": [
+        0.4526,
+        0.9368
+      ],
+      "grade": "C",
+      "escaped": [
+        "M03 key_swap",
+        "M10 replay"
+      ]
+    },
+    "pinned": {
+      "mutants": 9,
+      "killed": 8,
+      "accepted": 1,
+      "kill_rate": 0.8889,
+      "kill_rate_pct": 88.89,
+      "wilson95": [
+        0.565,
+        0.9801
+      ],
+      "grade": "B",
+      "escaped": [
+        "M10 replay"
+      ]
+    },
+    "head-pinned": {
+      "mutants": 0,
+      "killed": 0,
+      "accepted": 0,
+      "kill_rate": null,
+      "grade": "N/A",
+      "escaped": [],
+      "note": "CLI 未暴露 checkpoint/序列接口"
+    }
+  },
+  "false_reject_on_legit": {
+    "legit_rc_open": 0,
+    "legit_rc_pinned": 0,
+    "false_reject_on_legit": 0
+  },
+  "not_applicable": [
+    {
+      "id": "M04",
+      "family": "rollback",
+      "why": "无历史序列，N/A"
+    },
+    {
+      "id": "M07",
+      "family": "reorder",
+      "why": "单步运行无可重排条目，N/A"
+    },
+    {
+      "id": "M11",
+      "family": "encoding_alias",
+      "why": "JSON 编码别名不构成安全逃逸，N/A"
+    }
+  ],
+  "rows": [
+    {
+      "id": "M01",
+      "family": "output_tamper",
+      "note": "篡改步骤输出",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures[0] does not verify against the bundle"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures[0] does not verify against the bundle"
+        }
+      }
+    },
+    {
+      "id": "M02",
+      "family": "sig_flip",
+      "note": "签名字节翻转",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures[0] does not verify against the bundle"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures[0] does not verify against the bundle"
+        }
+      }
+    },
+    {
+      "id": "M03",
+      "family": "key_swap",
+      "note": "换钥重签（攻击者钥匙）",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 0,
+          "accepted": true,
+          "out": "OK C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\erm_pl_isx_bnmw\\m_M03.json"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "bundle carries no valid signature from C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\erm_pl_isx_bnmw\\k1\\proofline-signing.pub.pem"
+        }
+      }
+    },
+    {
+      "id": "M04",
+      "family": "rollback",
+      "note": "无历史序列，N/A",
+      "status": "N/A"
+    },
+    {
+      "id": "M05",
+      "family": "truncate",
+      "note": "删除最后一步（截断）",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures[0] does not verify against the bundle"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures[0] does not verify against the bundle"
+        }
+      }
+    },
+    {
+      "id": "M06",
+      "family": "inject",
+      "note": "注入未知字段/步骤",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures[0] does not verify against the bundle"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures[0] does not verify against the bundle"
+        }
+      }
+    },
+    {
+      "id": "M07",
+      "family": "reorder",
+      "note": "单步运行无可重排条目，N/A",
+      "status": "N/A"
+    },
+    {
+      "id": "M08",
+      "family": "metadata_edit",
+      "note": "改元数据（actor.name）",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures[0] does not verify against the bundle"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures[0] does not verify against the bundle"
+        }
+      }
+    },
+    {
+      "id": "M09",
+      "family": "digest_swap",
+      "note": "bundle_digest 换全 0",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures[0] does not verify against the bundle"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures[0] does not verify against the bundle"
+        }
+      }
+    },
+    {
+      "id": "M10",
+      "family": "replay",
+      "note": "整包重放（同钥匙、另一运行）",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 0,
+          "accepted": true,
+          "out": "OK C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\erm_pl_isx_bnmw\\m_M10.json"
+        },
+        "pinned": {
+          "rc": 0,
+          "accepted": true,
+          "out": "OK C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\erm_pl_isx_bnmw\\m_M10.json"
+        }
+      }
+    },
+    {
+      "id": "M11",
+      "family": "encoding_alias",
+      "note": "JSON 编码别名不构成安全逃逸，N/A",
+      "status": "N/A"
+    },
+    {
+      "id": "M12",
+      "family": "proof_missing",
+      "note": "删除全部签名（证明缺失）",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures must be a non-empty array when present"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "signatures must be a non-empty array when present"
+        }
+      }
+    }
+  ],
+  "caveats": [
+    "单步 bundle：rollback / reorder 不适用，已剔除",
+    "无日志头/序列接口，head-pinned 档 N/A（不等于不支持，而是接口未暴露）",
+    "变异体由评估者构造，不代表完整攻击面"
+  ],
+  "overall": {
+    "weakest_tier": "open",
+    "strongest_tier": "pinned",
+    "headline": "open 77.78% -> pinned 88.89%"
+  }
+}

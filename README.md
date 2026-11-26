@@ -26,11 +26,13 @@ Output per tier: `killed / n`, **95% Wilson interval**, letter grade (A ≥95%, 
 |---|---|---|---|---|
 | **UIBC Core 0.5.5** (21 mutants) | 19/21 = **90.5%** [71.1, 97.4] · B | 20/21 = **95.2%** [77.3, 99.2] · A | 21/21 = **100%** [84.5, 100] · A | 0/2 |
 | **proofbundle 6.6.1** (10 eligible mutants) | 7/10 = **70.0%** [39.7, 89.2] · C | 8/10 = **80.0%** [49.0, 94.3] · B | N/A (no checkpoint) | 0/2 |
+| **proofline 0.4.0** (9 eligible mutants) | 7/9 = **77.8%** [45.3, 93.7] · C | 8/9 = **88.9%** [56.5, 98.0] · B | N/A (no sequence interface) | 0/2 |
 
-Read the full comparison and the caveats in [`results/COMPARISON.md`](results/COMPARISON.md). Two findings worth the whole exercise:
+Read the full comparison and the caveats in [`results/COMPARISON.md`](results/COMPARISON.md). Three findings worth the whole exercise:
 
-1. **Both verifiers let a key-substitution escape at `open`.** Expected — with no anchor there is no identity.
-2. **`proofbundle` still lets it escape at `pinned`**, because pinning the *content root* does not pin the *signer key*: an attacker re-signs the same payload, the Merkle root is identical, the pin matches. **For evidence, pin the key, not just the root.** That is a measurement result, not a defect claim — read their [NON_CLAIMS](https://pypi.org/project/proofbundle/) before quoting it.
+1. **All three leak key substitution at `open`.** Expected — with no anchor there is no identity.
+2. **`proofbundle` still leaks it at `pinned`**, because pinning the *content root* does not pin the *signer key*: an attacker re-signs the same payload, the Merkle root is identical, the pin matches. **For evidence, pin the key, not just the root.**
+3. **`proofline` blocks every tamper question and still accepts a replay**: an older run signed by the same key passes at both tiers — integrity without freshness. UIBC Core is the only tool here whose escape set reaches zero once the log head is pinned.
 
 ## Reproduce
 
