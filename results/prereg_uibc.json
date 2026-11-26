@@ -1,0 +1,56 @@
+{
+  "subject": "uibc verify CLI 0.5.5",
+  "families": {
+    "M13 alias (padding stripped)": {
+      "open": {
+        "rc": 1,
+        "verdict": "FAIL",
+        "accepted": false
+      },
+      "pinned": {
+        "rc": 1,
+        "verdict": "FAIL",
+        "accepted": false
+      },
+      "head-pinned": {
+        "rc": 1,
+        "verdict": "FAIL",
+        "accepted": false
+      }
+    },
+    "M14 two-leaf drop": {
+      "open": {
+        "rc": 1,
+        "verdict": "FAIL",
+        "accepted": false
+      },
+      "pinned": {
+        "rc": 1,
+        "verdict": "FAIL",
+        "accepted": false
+      },
+      "head-pinned": {
+        "rc": 1,
+        "verdict": "FAIL",
+        "accepted": false
+      }
+    },
+    "M15 head truncation": {
+      "open": {
+        "rc": 1,
+        "verdict": "FAIL",
+        "accepted": false
+      },
+      "pinned": {
+        "rc": 1,
+        "verdict": "FAIL",
+        "accepted": false
+      },
+      "head-pinned": {
+        "rc": 1,
+        "verdict": "FAIL",
+        "accepted": false
+      }
+    }
+  }
+}
