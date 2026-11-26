@@ -67,3 +67,40 @@ python work/erm/uibc_prereg.py --python "$(command -v python)" --out prereg_uibc
 
 Raw cells: `results/prereg_uibc.json`. Spec hash frozen above; the script was written after the predictions, which is the only ordering that makes them predictions.
 
+---
+
+# Batch 2 (registered 2026-11-27T03:26Z, before `work/erm/uibc_prereg2.py` existed)
+
+Two families the first 12 marked `not_applicable` for a structural reason I can now test:
+
+| Family | `open` | `pinned` | `head-pinned` | Why I expect this |
+|---|---|---|---|---|
+| M16 event reorder — swap the first two `lifecycle.json` events | **killed** | **killed** | **killed** | the lifecycle is a state machine with declared order (S3) and a chain over it (S8); swapping two events should break both without needing an anchor. |
+| M17 index path traversal — point an `index.json` entry at `../../escape.txt` | **killed** | **killed** | **killed** | S4 owns path escape; the vendored corpus already treats `../` as a structural violation, and this is the same shape one level out. |
+
+If M16 survives anywhere, S3 does not actually enforce order and the "state machine" language in the docs is decoration. If M17 survives, the package can read outside its own directory while reporting PASS.
+
+# Batch 1 vs Batch 2: what is and is not blind
+
+Batch 2 was written after Batch 1 had been run, so its predictions are informed by knowing how this verifier behaves in general. It is blind only about **these two specific families**. That is weaker than a hold-out on an unseen tool, and this file says so rather than implying otherwise.
+
+A genuinely blind extension would need a fourth verifier that can be driven offline. Screening (see `SCREENED-SUBJECTS.md`) leaves none: the two nearby candidates are not bundle verifiers at all.
+
+
+
+---
+
+## Batch 2 results (run 2026-11-27T03:27Z)
+
+| Family | open | pinned | head-pinned | Predicted | Verdict |
+|---|---|---|---|---|---|
+| M16 event reorder | — | — | — | killed ×3 | **not constructible** |
+| M17 index path traversal | FAIL, killed | FAIL, killed | FAIL, killed | killed ×3 | ✅ hit (3/3) |
+
+**M16 is not a miss — it is an empty cell.** The shipped CLI never produces a lifecycle with two events (init + register + evidence + submit yields one), so reordering cannot be constructed without handcrafting a lifecycle the tool itself would not have produced. That is a different statement from "the check passed", and it should be read as *the family is untestable on packages this tool emits*.
+
+**M17 hit.** An index entry pointing at `../../escape.txt` fails at every tier, so the path-escape claim is not decoration.
+
+Raw cells: `results/prereg2_uibc.json`. Run: `python adapters/uibc_prereg2.py --python <python> --out prereg2_uibc.json`.
+
+Cumulative across both batches: **11 of 12 registered cells hit, 1 miss (M15), 3 empty cells (M16 ×3)**.

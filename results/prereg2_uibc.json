@@ -1,0 +1,25 @@
+{
+  "subject": "uibc verify CLI 0.5.5",
+  "families": {
+    "M16 event reorder": {
+      "note": "not constructible on this package"
+    },
+    "M17 index path traversal": {
+      "open": {
+        "rc": 1,
+        "verdict": "FAIL",
+        "accepted": false
+      },
+      "pinned": {
+        "rc": 1,
+        "verdict": "FAIL",
+        "accepted": false
+      },
+      "head-pinned": {
+        "rc": 1,
+        "verdict": "FAIL",
+        "accepted": false
+      }
+    }
+  }
+}
