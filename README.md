@@ -20,6 +20,10 @@ For a verifier V and a corpus of known-bad bundles, for each **trust configurati
 
 Output per tier: `killed / n`, **95% Wilson interval**, letter grade (A ≥95%, B 80–95%, C 50–80%, D <50%). Plus `false_reject_on_legit` — a verifier that kills everything is not good, it is useless.
 
+## Prior art — read this before claiming the ground is empty
+
+Adequacy measurement is **not** unoccupied. Mendmark (`mendmark-evals`, 2026-08-12) does mutation testing of agent *evaluation suites* with a release gate; arXiv 2610.02928 does mutation analysis of a *verification suite* with a pre-registered repair, 5/10 killed by externally specified mutants; arXiv 2610.09142 audits shipped AppWorld/WorkArena oracles for PASS-on-wrong-effect. What this repo adds is narrower: **one foreign mutator, three published verifiers, three tiers each** — and the only one of the four that measures somebody else's release rather than its own suite. Details, including what they do better, in [`PRIOR-ART.md`](PRIOR-ART.md).
+
 ## Results so far (one mutator, three tools — 2026-11-27, Windows 11 / Python 3.13.18)
 
 | Verifier | open | pinned | head-pinned | false reject |
