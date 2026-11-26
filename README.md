@@ -20,6 +20,14 @@ For a verifier V and a corpus of known-bad bundles, for each **trust configurati
 
 Output per tier: `killed / n`, **95% Wilson interval**, letter grade (A ≥95%, B 80–95%, C 50–80%, D <50%). Plus `false_reject_on_legit` — a verifier that kills everything is not good, it is useless.
 
+## Reproduce every published number in one command
+
+```bash
+python tools/reproduce.py --python "$(command -v python)"
+```
+
+It re-measures all three verifiers from scratch (each adapter builds its own fixtures) and diffs the tier kill counts against the committed JSON. Exit 0 only on exact agreement — a "roughly matches" is a failure. Last run 2026-11-27: `UIBC Core MATCH / proofbundle MATCH / proofline MATCH — REPRODUCED`.
+
 ## The interface a verifier needs to be measurable at all
 
 Six properties, each checkable in one command, with a compliance table for the three tools measured here: [`VERIFIER-INTERFACE.md`](VERIFIER-INTERFACE.md). Short version — P1 one entry point, P2 pin the signer, P3 pin the head, P4 machine-readable verdict, P5 exit code agreeing with it, P6 a PASS that names what it ignored. Two of three current subjects cannot meet P3, so that column is empty for them because the test could not be run.
