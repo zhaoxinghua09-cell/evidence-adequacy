@@ -57,6 +57,45 @@
       "escaped": [
         "M06 inject"
       ]
+    },
+    "open+strict": {
+      "mutants": 9,
+      "killed": 9,
+      "accepted": 0,
+      "kill_rate": 1.0,
+      "kill_rate_pct": 100.0,
+      "wilson95": [
+        0.7008,
+        1.0
+      ],
+      "grade": "A",
+      "escaped": []
+    },
+    "pinned+strict": {
+      "mutants": 9,
+      "killed": 9,
+      "accepted": 0,
+      "kill_rate": 1.0,
+      "kill_rate_pct": 100.0,
+      "wilson95": [
+        0.7008,
+        1.0
+      ],
+      "grade": "A",
+      "escaped": []
+    },
+    "head-pinned+strict": {
+      "mutants": 9,
+      "killed": 9,
+      "accepted": 0,
+      "kill_rate": 1.0,
+      "kill_rate_pct": 100.0,
+      "wilson95": [
+        0.7008,
+        1.0
+      ],
+      "grade": "A",
+      "escaped": []
     }
   },
   "false_reject_on_legit": {
@@ -109,6 +148,24 @@
           "verdict": "FAIL",
           "accepted": false,
           "out": "}"
+        },
+        "open+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
         }
       }
     },
@@ -131,6 +188,24 @@
           "out": "}"
         },
         "head-pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "open+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned+strict": {
           "rc": 1,
           "verdict": "FAIL",
           "accepted": false,
@@ -161,6 +236,24 @@
           "verdict": "FAIL",
           "accepted": false,
           "out": "}"
+        },
+        "open+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
         }
       }
     },
@@ -183,6 +276,24 @@
           "out": "}"
         },
         "head-pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "open+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned+strict": {
           "rc": 1,
           "verdict": "FAIL",
           "accepted": false,
@@ -213,6 +324,24 @@
           "verdict": "FAIL",
           "accepted": false,
           "out": "}"
+        },
+        "open+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
         }
       }
     },
@@ -239,6 +368,24 @@
           "verdict": "PASS",
           "accepted": true,
           "out": "}"
+        },
+        "open+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
         }
       }
     },
@@ -261,6 +408,24 @@
           "out": "}"
         },
         "head-pinned": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "open+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned+strict": {
           "rc": 1,
           "verdict": "FAIL",
           "accepted": false,
@@ -291,6 +456,24 @@
           "verdict": "FAIL",
           "accepted": false,
           "out": "}"
+        },
+        "open+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
         }
       }
     },
@@ -315,6 +498,24 @@
         "head-pinned": {
           "rc": 1,
           "verdict": "INCONCLUSIVE",
+          "accepted": false,
+          "out": "}"
+        },
+        "open+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
+          "accepted": false,
+          "out": "}"
+        },
+        "head-pinned+strict": {
+          "rc": 1,
+          "verdict": "FAIL",
           "accepted": false,
           "out": "}"
         }

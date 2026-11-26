@@ -19,6 +19,9 @@ import sys
 import tempfile
 
 
+TIERS = ("open", "pinned", "head-pinned", "open+strict", "pinned+strict", "head-pinned+strict")
+
+
 def run(py, args, timeout=120):
     p = subprocess.run([py, "-m", "uibc_core.cli"] + args, capture_output=True, text=True, timeout=timeout)
     out = (p.stdout or "") + (p.stderr or "")
@@ -79,6 +82,12 @@ def verify(py, pkg, tier, ctx):
         args += ["--pubkey", ctx["pub"]]
     elif tier == "head-pinned":
         args += ["--expect-head", ctx["head"]]
+    elif tier == "open+strict":
+        args += ["--strict"]
+    elif tier == "pinned+strict":
+        args += ["--pubkey", ctx["pub"], "--strict"]
+    elif tier == "head-pinned+strict":
+        args += ["--expect-head", ctx["head"], "--strict"]
     rc, verdict, out = run(py, args)
     # 接受判定：verdict=PASS 且 rc=0；两者矛盾时按"未被拒绝"处理并记录
     accepted = (verdict == "PASS")
@@ -118,7 +127,7 @@ def main():
         rows = []
 
         def add(mid, fam, note, path):
-            per = {t: verify(a.python, path, t, ctx) for t in ("open", "pinned", "head-pinned")}
+            per = {t: verify(a.python, path, t, ctx) for t in TIERS}
             rows.append({"id": mid, "family": fam, "note": note, "status": "OK", "modes": per})
 
         # M01 证据篡改
@@ -189,7 +198,7 @@ def main():
                           "变异体由评估者构造，不代表完整攻击面",
                           "接受判定取 verify 的 JSON result=PASS；rc 与 result 不一致时按'未被拒绝'记录"]}
 
-        for t in ("open", "pinned", "head-pinned"):
+        for t in TIERS:
             el = [r for r in rows if r["status"] == "OK"]
             killed = [r for r in el if not r["modes"][t]["accepted"]]
             p_, lo, hi = wilson(len(killed), len(el))
@@ -213,3 +222,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

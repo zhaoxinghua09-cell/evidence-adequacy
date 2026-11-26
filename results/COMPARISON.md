@@ -23,6 +23,17 @@ Escapes per tier:
 | `pinned` | rollback, inject | key_swap, b64 alias | replay |
 | `head-pinned` | inject | — | — |
 
+### UIBC Core in `--strict` (20261127, added after the escape was named)
+
+UIBC Core exposes a hardened mode; the same 9 eligible mutants run against it:
+
+| Config | open | pinned | head-pinned |
+|---|---|---|---|
+| default (lenient) | 6/9 = **66.7%** · C | 7/9 = **77.8%** · C | 8/9 = **88.9%** · B |
+| `--strict` | 9/9 = **100%** [70.1, 100] · A | 9/9 = **100%** · A | 9/9 = **100%** · A |
+
+So the M06 escape is **configuration-dependent, not silent-by-design**: the hardened mode kills everything, the default does not. That is the finding, stated without the word "defect": a verifier whose safe mode is opt-in presents its weakest configuration to everyone who does not read the flags.
+
 ## Table B — tool-native corpus (not comparable with A)
 
 | Verifier | mutants | open | pinned | head-pinned |
