@@ -1,0 +1,277 @@
+{
+  "schema": "erm-scorecard/v0.1",
+  "subject": {
+    "tool": "proofbundle verify (CLI)",
+    "package": "proofbundle",
+    "package_version": "6.6.1"
+  },
+  "corpus": {
+    "source": "ERM 12-family mutator (adapter-generated)",
+    "mutants": 12
+  },
+  "tiers": {
+    "open": {
+      "mutants": 10,
+      "killed": 7,
+      "accepted": 3,
+      "kill_rate": 0.7,
+      "kill_rate_pct": 70.0,
+      "wilson95": [
+        0.3968,
+        0.8922
+      ],
+      "grade": "C",
+      "escaped": [
+        "M03 key_swap",
+        "M10 replay",
+        "M11 b64_alias"
+      ]
+    },
+    "pinned": {
+      "mutants": 10,
+      "killed": 8,
+      "accepted": 2,
+      "kill_rate": 0.8,
+      "kill_rate_pct": 80.0,
+      "wilson95": [
+        0.4902,
+        0.9433
+      ],
+      "grade": "B",
+      "escaped": [
+        "M03 key_swap",
+        "M11 b64_alias"
+      ]
+    },
+    "head-pinned": {
+      "mutants": 0,
+      "killed": 0,
+      "accepted": 0,
+      "kill_rate": null,
+      "grade": "N/A",
+      "escaped": [],
+      "note": "需要 trusted-checkpoint 文件，未获取"
+    }
+  },
+  "false_reject_on_legit": {
+    "legit_rc_open": 0,
+    "legit_rc_pinned": 0,
+    "false_reject_on_legit": 0
+  },
+  "not_applicable": [
+    {
+      "id": "M04",
+      "family": "rollback",
+      "why": "单叶 bundle 无历史，N/A"
+    },
+    {
+      "id": "M07",
+      "family": "reorder",
+      "why": "单叶无可重排条目，N/A"
+    }
+  ],
+  "rows": [
+    {
+      "id": "M01",
+      "family": "payload_tamper",
+      "note": "payload 末字节翻转",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "accepted": false,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        }
+      }
+    },
+    {
+      "id": "M02",
+      "family": "sig_flip",
+      "note": "签名字节翻转",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "accepted": false,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        }
+      }
+    },
+    {
+      "id": "M03",
+      "family": "key_swap",
+      "note": "换钥重签（攻击者自签）",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 0,
+          "accepted": true,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        },
+        "pinned": {
+          "rc": 0,
+          "accepted": true,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        }
+      }
+    },
+    {
+      "id": "M04",
+      "family": "rollback",
+      "note": "单叶 bundle 无历史，N/A",
+      "status": "N/A"
+    },
+    {
+      "id": "M05",
+      "family": "truncate",
+      "note": "tree_size 减一（截断）",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "accepted": false,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        }
+      }
+    },
+    {
+      "id": "M06",
+      "family": "inject",
+      "note": "注入未知顶层字段",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 2,
+          "accepted": false,
+          "out": "ERROR: unknown field(s) in bundle: [\"'extra_entry'\"]"
+        },
+        "pinned": {
+          "rc": 2,
+          "accepted": false,
+          "out": "ERROR: unknown field(s) in bundle: [\"'extra_entry'\"]"
+        }
+      }
+    },
+    {
+      "id": "M07",
+      "family": "reorder",
+      "note": "单叶无可重排条目，N/A",
+      "status": "N/A"
+    },
+    {
+      "id": "M08",
+      "family": "metadata_edit",
+      "note": "schema 串改动（不改字节）",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 2,
+          "accepted": false,
+          "out": "ERROR: unsupported schema 'proofbundle/v0.1 ', expected 'proofbundle/v0.1'"
+        },
+        "pinned": {
+          "rc": 2,
+          "accepted": false,
+          "out": "ERROR: unsupported schema 'proofbundle/v0.1 ', expected 'proofbundle/v0.1'"
+        }
+      }
+    },
+    {
+      "id": "M09",
+      "family": "root_swap",
+      "note": "根换全 0",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 1,
+          "accepted": false,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        }
+      }
+    },
+    {
+      "id": "M10",
+      "family": "replay",
+      "note": "整包重放（另一合法包）",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 0,
+          "accepted": true,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        },
+        "pinned": {
+          "rc": 1,
+          "accepted": false,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        }
+      }
+    },
+    {
+      "id": "M11",
+      "family": "b64_alias",
+      "note": "base64 去 padding（编码别名）",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 0,
+          "accepted": true,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        },
+        "pinned": {
+          "rc": 0,
+          "accepted": true,
+          "out": "LIMITATIONS: NOT that the result is true, the eval well designed, the model safe/fair, or that the score generalizes (see NON_CLAIMS.md); and NOT when it happen"
+        }
+      }
+    },
+    {
+      "id": "M12",
+      "family": "proof_missing",
+      "note": "删除 root 字段（证明缺失）",
+      "status": "OK",
+      "modes": {
+        "open": {
+          "rc": 2,
+          "accepted": false,
+          "out": "ERROR: missing field merkle.root_b64"
+        },
+        "pinned": {
+          "rc": 2,
+          "accepted": false,
+          "out": "ERROR: missing field merkle.root_b64"
+        }
+      }
+    }
+  ],
+  "caveats": [
+    "单叶 bundle：rollback/reorder 两族不适用，已从分母剔除",
+    "head-pinned 档位需要 checkpoint 文件，本轮未取到，标 N/A（不等于不支持）",
+    "变异体由评估者构造，不代表完整攻击面"
+  ],
+  "overall": {
+    "weakest_tier": "open",
+    "strongest_tier": "pinned",
+    "headline": "open 70.0% -> pinned 80.0%"
+  }
+}

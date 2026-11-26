@@ -1,0 +1,75 @@
+{
+  "schema": "erm-scorecard/v0.1",
+  "subject": {
+    "tool": "uibc-core verify()",
+    "package": "mb-agent-001",
+    "package_version": "uibc-core (git 79811e13)"
+  },
+  "corpus": {
+    "source": "mutation_benchmark.json",
+    "mutants": 21,
+    "generated_at_utc": "2026-11-26T15:19:04Z"
+  },
+  "tiers": {
+    "open": {
+      "mutants": 21,
+      "killed": 19,
+      "accepted": 2,
+      "kill_rate": 0.9048,
+      "kill_rate_pct": 90.48,
+      "wilson95": [
+        0.7109,
+        0.9735
+      ],
+      "grade": "B",
+      "escaped": [
+        "M17 换钥重签（keyswap）",
+        "M20 整包回滚（装在旧包）"
+      ]
+    },
+    "pinned": {
+      "mutants": 21,
+      "killed": 20,
+      "accepted": 1,
+      "kill_rate": 0.9524,
+      "kill_rate_pct": 95.24,
+      "wilson95": [
+        0.7733,
+        0.9915
+      ],
+      "grade": "A",
+      "escaped": [
+        "M20 整包回滚（装在旧包）"
+      ]
+    },
+    "head-pinned": {
+      "mutants": 21,
+      "killed": 21,
+      "accepted": 0,
+      "kill_rate": 1.0,
+      "kill_rate_pct": 100.0,
+      "wilson95": [
+        0.8454,
+        1.0
+      ],
+      "grade": "A",
+      "escaped": []
+    }
+  },
+  "false_reject_on_legit": {
+    "base_open": "PASS",
+    "base_pinned": "PASS",
+    "false_reject_on_legit": 0
+  },
+  "overall": {
+    "weakest_tier": "open",
+    "strongest_tier": "head-pinned",
+    "headline": "open 90.48% -> pinned 95.24% -> head-pinned 100.0%"
+  },
+  "caveats": [
+    "以 PASS 作为'被接受'；INCONCLUSIVE/FAIL 记未接受（按原基准口径）",
+    "21 个变异体是作者自建，非同分布抽样，不能外推为通用漏网率",
+    "未含'合法包被误杀'的样本量（仅有 2 个基线包）",
+    "head-pinned 档位的强依赖是锚点/日志头，该档位在无锚点时不可用"
+  ]
+}
