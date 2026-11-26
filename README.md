@@ -20,7 +20,7 @@ For a verifier V and a corpus of known-bad bundles, for each **trust configurati
 
 Output per tier: `killed / n`, **95% Wilson interval**, letter grade (A ≥95%, B 80–95%, C 50–80%, D <50%). Plus `false_reject_on_legit` — a verifier that kills everything is not good, it is useless.
 
-## Prior art — read this before claiming the ground is empty
+## The interface a verifier needs to be measurable at all`n`nSix properties, each checkable in one command, with a compliance table for the three tools measured here: [`VERIFIER-INTERFACE.md`](VERIFIER-INTERFACE.md). Short version — P1 one entry point, P2 pin the signer, P3 pin the head, P4 machine-readable verdict, P5 exit code agreeing with it, P6 a PASS that names what it ignored. Two of three current subjects cannot meet P3, so that column is empty for them because the test could not be run.`n`n## Prior art — read this before claiming the ground is empty
 
 Adequacy measurement is **not** unoccupied. Mendmark (`mendmark-evals`, 2026-08-12) does mutation testing of agent *evaluation suites* with a release gate; arXiv 2610.02928 does mutation analysis of a *verification suite* with a pre-registered repair, 5/10 killed by externally specified mutants; arXiv 2610.09142 audits shipped AppWorld/WorkArena oracles for PASS-on-wrong-effect. What this repo adds is narrower: **one foreign mutator, three published verifiers, three tiers each** — and the only one of the four that measures somebody else's release rather than its own suite. Details, including what they do better, in [`PRIOR-ART.md`](PRIOR-ART.md).
 
@@ -87,3 +87,4 @@ UIBC Core is maintained in the same ecosystem as this repo's author; proofbundle
 ## License
 
 MIT.
+
