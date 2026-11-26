@@ -30,6 +30,13 @@ def tiers_of(path):
     return out
 
 
+def false_rejects(path):
+    """A metre that kills everything is not a metre. This is the other half of the check."""
+    d = json.load(open(path, encoding="utf-8"))
+    fr = d.get("false_reject_on_legit") or {}
+    return fr.get("false_reject_on_legit")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--python", required=True)
@@ -77,6 +84,13 @@ def main():
         for tier in new:
             if tier not in old:
                 bad.append(f"{tier}: unpublished tier appeared")
+        # false rejects: a metre that rejects every legitimate package would
+        # otherwise score 100% and look perfect
+        fr_old, fr_new = false_rejects(published), false_rejects(fresh)
+        if fr_old != fr_new:
+            bad.append(f"false_reject_on_legit: published {fr_old} vs fresh {fr_new}")
+        elif fr_new not in (0, None):
+            bad.append(f"false_reject_on_legit is {fr_new}, not zero — kill rate is not the only axis")
         rows.append((name, "MATCH" if not bad else "DRIFT", "; ".join(bad)))
         drift += 1 if bad else 0
 
